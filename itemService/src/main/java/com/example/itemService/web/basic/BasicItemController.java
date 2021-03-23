@@ -4,12 +4,10 @@ import com.example.itemService.domain.Item;
 import com.example.itemService.domain.ItemRepository;
 import com.example.itemService.domain.ItemService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -40,9 +38,36 @@ public class BasicItemController {
         return "basic/addForm";
     }
 
+//    @PostMapping("/add")
+    public String addItemV1(@RequestParam String itemName,
+                       @RequestParam int price,
+                       @RequestParam Integer quantity,
+                       Model model){
+
+        Item item = new Item(itemName,price,quantity);
+
+        itemService.save(item);
+        model.addAttribute("item",item);
+        return "basic/item";
+    }
+
+//    @PostMapping("/add")
+    public String addItemV2(@ModelAttribute("item") Item item){
+        itemService.save(item);
+//        model.addAttribute("item",item); 자동추가, 생략 가능
+        return "basic/item";
+    }
+
+//    @PostMapping("/add")
+    public String addItemV3(@ModelAttribute Item item){
+        itemService.save(item);
+        return "basic/item";
+    }
+
     @PostMapping("/add")
-    public String save(){
-        return "basic/items";
+    public String addItemV4(Item item){
+        itemService.save(item);
+        return "basic/item";
     }
 
     /**
